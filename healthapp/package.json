@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc --noEmit",
-    "bmi-calculate": "tsc && node bmiCalculator.js"
+    "calculateBmi": "tsc && node bmiCalculator.js",
+    "calculateExercises": "tsc && node exerciseCalculator.js"
   },
   "author": "",
   "license": "ISC",
