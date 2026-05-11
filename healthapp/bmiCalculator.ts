@@ -1,3 +1,5 @@
+import { notNumberCheck } from "./utils.ts";
+
 interface BmiCategory {
   from: number;
   to: number;
@@ -65,18 +67,16 @@ const calculateBmi = (heightS: number, weight: number): string => {
 };
 
 // args parser
-const parseArguments = (args: string[]): [number, number] => {
+const parseCalculateArgs = (args: string[]): [number, number] => {
   if (args.length < 4) throw new Error("Not enough arguments");
   if (args.length > 4) throw new Error("Too many arguments");
 
   const heightS = Number(args[2]);
   const weight = Number(args[3]);
 
-  if (isNaN(heightS) || isNaN(weight)) {
-    throw new Error("Provided values were not numbers!");
-  }
+  notNumberCheck([heightS, weight]);
 
   return [heightS, weight];
 };
 
-console.log(calculateBmi(...parseArguments(process.argv)));
+console.log(calculateBmi(...parseCalculateArgs(process.argv)));

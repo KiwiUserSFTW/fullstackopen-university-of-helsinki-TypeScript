@@ -1,8 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "noImplicitAny": true,
-    "noEmit": false,
+    "target": "esnext",
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "nodenext",
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
     "types": ["node"]
   }
 }

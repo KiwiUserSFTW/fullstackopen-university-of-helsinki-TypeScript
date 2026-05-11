@@ -1,3 +1,5 @@
+import { notNumberCheck } from "./utils.ts";
+
 interface ExerciseCalculatorResult {
   periodLength: number;
   trainingDays: number;
@@ -16,10 +18,10 @@ const ratingCalculator = (average: number): [string, number] => {
 };
 
 interface ExerciseCalculator {
-  (daysResults: number[], target: number): ExerciseCalculatorResult;
+  (target: number, daysResults: number[]): ExerciseCalculatorResult;
 }
 
-const exerciseCalculator: ExerciseCalculator = (daysResults, target) => {
+const exerciseCalculator: ExerciseCalculator = (target, daysResults) => {
   const periodLength = daysResults.length;
   const average =
     daysResults.reduce((sum, hours) => sum + hours, 0) / periodLength;
@@ -38,4 +40,14 @@ const exerciseCalculator: ExerciseCalculator = (daysResults, target) => {
   };
 };
 
-console.log(exerciseCalculator([3, 0, 2, 4.5, 0, 3, 1], 2));
+const parseExerciseArgs = (args: string[]): [number, number[]] => {
+  if (args.length < 4) throw new Error("Not enough arguments");
+
+  const daysResults = args.slice(3).map((v) => Number(v));
+  const target = Number(args[2]);
+  notNumberCheck([...daysResults, target]);
+
+  return [target, daysResults];
+};
+
+console.log(exerciseCalculator(...parseExerciseArgs(process.argv)));
