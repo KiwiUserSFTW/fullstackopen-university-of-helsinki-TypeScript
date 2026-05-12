@@ -50,7 +50,7 @@ const bmiCategories: BmiCategory[] = [
   },
 ];
 
-const calculateBmi = (heightS: number, weight: number): string => {
+export const calculateBmi = (heightS: number, weight: number): string => {
   const heightM = heightS / 100;
   const bmi: number = weight / (heightM * heightM);
 
@@ -67,7 +67,7 @@ const calculateBmi = (heightS: number, weight: number): string => {
 };
 
 // args parser
-const parseCalculateArgs = (args: string[]): [number, number] => {
+ const parseCalculateArgs = (args: string[]): [number, number] => {
   if (args.length < 4) throw new Error("Not enough arguments");
   if (args.length > 4) throw new Error("Too many arguments");
 
@@ -79,4 +79,6 @@ const parseCalculateArgs = (args: string[]): [number, number] => {
   return [heightS, weight];
 };
 
-console.log(calculateBmi(...parseCalculateArgs(process.argv)));
+if (process.argv[1] === import.meta.filename) {
+  console.log(calculateBmi(...parseCalculateArgs(process.argv)));
+}
