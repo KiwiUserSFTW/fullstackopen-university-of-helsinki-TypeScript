@@ -10,24 +10,37 @@ interface ExerciseCalculatorResult {
   average: number;
 }
 
-const ratingCalculator = (average: number): [string, number] => {
-  const normalizedAverage = Math.max(1, Math.min(Math.ceil(average), 3));
-  const ratings = ["could be better", "good rythm buddy", "excellent work"];
+const ratings: { minRatio: number; rate: number; description: string }[] = [
+  { minRatio: 1, rate: 3, description: "excellent work " },
+  { minRatio: 0.75, rate: 2, description: "good rythm buddy" },
+  { minRatio: 0, rate: 1, description: "could be better, bad" },
+];
 
-  return [ratings[normalizedAverage - 1], normalizedAverage];
+const ratingCalculator = (
+  average: number,
+  target: number,
+): [string, number] => {
+  const ratio = average / target;
+  const rating = ratings.find((v) => ratio >= v.minRatio);
+
+  if (!rating) {
+    throw new Error("No rating mached");
+  }
+
+  return [rating.description, rating.rate];
 };
 
 interface ExerciseCalculator {
   (target: number, daysResults: number[]): ExerciseCalculatorResult;
 }
 
-const exerciseCalculator: ExerciseCalculator = (target, daysResults) => {
+export const exerciseCalculator: ExerciseCalculator = (target, daysResults) => {
   const periodLength = daysResults.length;
   const average =
     daysResults.reduce((sum, hours) => sum + hours, 0) / periodLength;
   const trainingDays = daysResults.filter((hours) => hours > 0).length;
   const success = average >= target;
-  const [ratingDescription, rating] = ratingCalculator(average);
+  const [ratingDescription, rating] = ratingCalculator(average, target);
 
   return {
     periodLength,
@@ -50,4 +63,6 @@ const parseExerciseArgs = (args: string[]): [number, number[]] => {
   return [target, daysResults];
 };
 
-console.log(exerciseCalculator(...parseExerciseArgs(process.argv)));
+if (process.argv[1] === import.meta.filename) {
+  console.log(exerciseCalculator(...parseExerciseArgs(process.argv)));
+}
