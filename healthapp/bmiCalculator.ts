@@ -50,8 +50,19 @@ const bmiCategories: BmiCategory[] = [
   },
 ];
 
-export const calculateBmi = (heightS: number, weight: number): string => {
-  const heightM = heightS / 100;
+interface calculateBmiParams {
+  weight: number;
+  height: number;
+}
+interface calculateBmiResponse extends calculateBmiParams {
+  bmi: string;
+}
+
+export const calculateBmi = ({
+  height,
+  weight,
+}: calculateBmiParams): calculateBmiResponse => {
+  const heightM = height / 100;
   const bmi: number = weight / (heightM * heightM);
 
   let match: string | null = null;
@@ -63,11 +74,15 @@ export const calculateBmi = (heightS: number, weight: number): string => {
     }
   }
 
-  return match || "undefined";
+  return {
+    weight,
+    height: height,
+    bmi: match || "undefined",
+  };
 };
 
 // args parser
- const parseCalculateArgs = (args: string[]): [number, number] => {
+const parseCalculateArgs = (args: string[]): calculateBmiParams => {
   if (args.length < 4) throw new Error("Not enough arguments");
   if (args.length > 4) throw new Error("Too many arguments");
 
@@ -76,9 +91,9 @@ export const calculateBmi = (heightS: number, weight: number): string => {
 
   notNumberCheck([heightS, weight]);
 
-  return [heightS, weight];
+  return { height: heightS, weight };
 };
 
 if (process.argv[1] === import.meta.filename) {
-  console.log(calculateBmi(...parseCalculateArgs(process.argv)));
+  console.log(calculateBmi(parseCalculateArgs(process.argv)));
 }
