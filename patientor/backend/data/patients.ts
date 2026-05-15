@@ -1,4 +1,5 @@
-const data = [
+import { type PatientEntry } from "../types/patientsTypes.ts";
+const data:PatientEntry[] = [
     {
         "id": "d2773336-f723-11e9-8f0b-362b9e155667",
         "name": "John McClane",
