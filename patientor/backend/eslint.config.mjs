@@ -18,6 +18,7 @@ export default tseslint.config({
     "@stylistic": stylistic,
   },
   rules: {
+    "@typescript-eslint/consistent-type-imports": "error",
     "@stylistic/semi": "error",
     "@typescript-eslint/no-unsafe-assignment": "error",
     "@typescript-eslint/no-explicit-any": "error",
