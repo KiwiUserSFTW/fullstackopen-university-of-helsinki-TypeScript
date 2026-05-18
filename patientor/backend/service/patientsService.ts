@@ -23,7 +23,7 @@ const getPatients = (): PatientNonSensetiveEntries[] =>
       dateOfBirth,
       gender,
       occupation,
-    })
+    }),
   );
 
 const addPatients = (newEntry: PatientNewEntry): PatientEntry => {
