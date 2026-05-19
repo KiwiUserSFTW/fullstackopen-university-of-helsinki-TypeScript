@@ -1,11 +1,7 @@
 import type { JSX } from "react";
-import type { coursePartType } from "./App";
+import type { CoursePart } from "../types";
 
-const Total = ({
-  courseParts,
-}: {
-  courseParts: coursePartType[];
-}): JSX.Element => {
+const Total = ({ courseParts }: { courseParts: CoursePart[] }): JSX.Element => {
   const totalExercises = courseParts.reduce(
     (sum, part) => sum + part.exerciseCount,
     0
