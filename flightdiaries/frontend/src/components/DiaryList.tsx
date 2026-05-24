@@ -1,5 +1,4 @@
-import { type JSX } from "react";
-import { useEffect, useState } from "react";
+import { type JSX, useEffect, useState } from "react";
 import { type DiaryEntry } from "../types";
 import diaryService from "../service/diaryService";
 
@@ -10,7 +9,7 @@ const DiaryListItem = ({
 }): JSX.Element => (
   <div>
     <h3>{date}</h3>
-    <p>visibility: {visibility}</p>
+    <p> visibility: {visibility}</p>
     <p> weather: {weather}</p>
   </div>
 );
@@ -25,7 +24,7 @@ const DiaryList = () => {
     };
 
     fetchData();
-  });
+  }, []);
 
   if (!diaries) return <> loading ...</>;
   return (
