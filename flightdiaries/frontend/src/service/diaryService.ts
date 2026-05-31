@@ -9,10 +9,22 @@ const getAll = async () => {
 };
 
 const addOne = async (diary: NewDiaryEntry) => {
-  const { data } = await axios.post<NewDiaryEntry>(apiBaseUrl, diary);
+  try {
+    const { data } = await axios.post<DiaryEntry>(apiBaseUrl, diary);
+    return data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      const path = error.response?.data?.error?.[0]?.path?.[0];
 
-  return data;
+      if (path) {
+        error.message = `Incorect ${path}: ${diary[path as keyof NewDiaryEntry]}`;
+      }
+    }
+
+    throw error;
+  }
 };
+
 export default {
   getAll,
   addOne,

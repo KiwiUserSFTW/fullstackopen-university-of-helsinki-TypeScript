@@ -1,6 +1,5 @@
-import { type JSX, useEffect, useState } from "react";
+import { type JSX } from "react";
 import { type DiaryEntry } from "../types";
-import diaryService from "../service/diaryService";
 
 const DiaryListItem = ({
   diaryListItem: { date, visibility, weather },
@@ -13,19 +12,7 @@ const DiaryListItem = ({
     <p> weather: {weather}</p>
   </div>
 );
-const DiaryList = () => {
-  const [diaries, setDiaries] = useState<DiaryEntry[] | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const diaries = await diaryService.getAll();
-
-      setDiaries(diaries);
-    };
-
-    fetchData();
-  }, []);
-
+const DiaryList = ({ diaries }: { diaries: DiaryEntry[] | null }) => {
   if (!diaries) return <> loading ...</>;
   return (
     <div>
