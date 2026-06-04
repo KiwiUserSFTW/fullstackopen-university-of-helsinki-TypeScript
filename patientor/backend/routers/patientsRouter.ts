@@ -18,15 +18,24 @@ patientsRouter.get("/", (_req, res: Response<PatientNonSensetiveEntries[]>) => {
   res.json(patientsService.getPatients());
 });
 
+patientsRouter.get("/:id", (req, res: Response<PatientEntry>) => {
+  const patient = patientsService.getPatientById(req.params.id);
+  if (patient) {
+    res.json(patient);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
 patientsRouter.post(
   "/",
   newPatientsParser,
   (
     req: Request<unknown, unknown, PatientNewEntry>,
-    res: Response<PatientEntry>,
+    res: Response<PatientEntry>
   ) => {
     res.json(patientsService.addPatients(req.body));
-  },
+  }
 );
 
 patientsRouter.use(errorMiddleware);
