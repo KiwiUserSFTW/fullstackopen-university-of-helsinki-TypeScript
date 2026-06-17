@@ -1,18 +1,18 @@
 import { useEffect, useState, type JSX } from "react";
 import { useParams } from "react-router-dom";
-import { Typography } from "@mui/material";
+import { Typography, List, ListItem, Box } from "@mui/material";
 import { Male, Female } from "@mui/icons-material";
-import { Gender, Patient } from "../../types";
+import { PatientGender, PatientEntry, Gender } from "../../types";
 
 import patientService from "../../services/patients";
 
 const GenderIcon = ({ gender }: { gender: Gender }): JSX.Element => {
   switch (gender) {
-    case Gender.Female:
+    case PatientGender.Female:
       return <Female fontSize="large" />;
-    case Gender.Male:
+    case PatientGender.Male:
       return <Male fontSize="large" />;
-    case Gender.Other:
+    case PatientGender.Other:
       return <></>;
     default:
       return <></>;
@@ -21,7 +21,7 @@ const GenderIcon = ({ gender }: { gender: Gender }): JSX.Element => {
 
 const PatientInfoPage = (): JSX.Element | undefined => {
   const { id } = useParams();
-  const [patient, setPatient] = useState<Patient | null>(null);
+  const [patient, setPatient] = useState<PatientEntry | null>(null);
 
   useEffect(() => {
     const fetchPatient = async () => {
@@ -36,16 +36,32 @@ const PatientInfoPage = (): JSX.Element | undefined => {
 
   if (!patient) return;
 
+  console.log(patient);
+
   return (
     <div>
-      <div>
-        <Typography variant="h3">
+      <Box sx={{ p: 3 }}>
+        <Typography variant="h4">
           {patient.name} <GenderIcon gender={patient.gender} />
         </Typography>
         <Typography>ssn: {patient.ssn}</Typography>
         <Typography>occupation: {patient.occupation}</Typography>
         <Typography>date of birth: {patient.dateOfBirth}</Typography>
-      </div>
+        <Box sx={{ p: 2 }}>
+          <Typography variant="h5">entries</Typography>
+          {patient.entries?.map((entry) => (
+            <Box key={entry.id}>
+              <Typography> {entry.description}</Typography>
+              <List>
+                {entry.diagnosisCodes &&
+                  entry.diagnosisCodes.map((code) => (
+                    <ListItem key={code}> {code}</ListItem>
+                  ))}
+              </List>
+            </Box>
+          ))}
+        </Box>
+      </Box>
     </div>
   );
 };
