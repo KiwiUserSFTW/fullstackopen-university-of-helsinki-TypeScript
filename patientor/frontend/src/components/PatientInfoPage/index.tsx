@@ -1,6 +1,6 @@
 import { useEffect, useState, type JSX } from "react";
 import { useParams } from "react-router-dom";
-import { Typography, List, ListItem, Box } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { Male, Female } from "@mui/icons-material";
 import { PatientGender, PatientEntry, Gender } from "../../types";
 
@@ -19,7 +19,34 @@ const GenderIcon = ({ gender }: { gender: Gender }): JSX.Element => {
   }
 };
 
-const PatientInfoPage = (): JSX.Element | undefined => {
+const PatientEntries = ({
+  patient,
+}: {
+  patient: PatientEntry;
+}): JSX.Element => {
+  if (!patient) return <></>;
+  return (
+    <Box sx={{ p: 2 }}>
+      <Typography variant="h5">entries</Typography>
+      {patient.entries?.length >= 1 ? (
+        patient.entries.map((entry) => (
+          <Box key={entry.id}>
+            <Typography>
+              {entry.date} - {entry.description}
+            </Typography>
+            <ul>
+              {entry.diagnosisCodes &&
+                entry.diagnosisCodes.map((code) => <li key={code}> {code}</li>)}
+            </ul>
+          </Box>
+        ))
+      ) : (
+        <Typography>no entries</Typography>
+      )}
+    </Box>
+  );
+};
+const PatientInfoPage = (): JSX.Element => {
   const { id } = useParams();
   const [patient, setPatient] = useState<PatientEntry | null>(null);
 
@@ -34,9 +61,7 @@ const PatientInfoPage = (): JSX.Element | undefined => {
     fetchPatient();
   }, [id]);
 
-  if (!patient) return;
-
-  console.log(patient);
+  if (!patient) return <></>;
 
   return (
     <div>
@@ -47,20 +72,7 @@ const PatientInfoPage = (): JSX.Element | undefined => {
         <Typography>ssn: {patient.ssn}</Typography>
         <Typography>occupation: {patient.occupation}</Typography>
         <Typography>date of birth: {patient.dateOfBirth}</Typography>
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h5">entries</Typography>
-          {patient.entries?.map((entry) => (
-            <Box key={entry.id}>
-              <Typography> {entry.description}</Typography>
-              <List>
-                {entry.diagnosisCodes &&
-                  entry.diagnosisCodes.map((code) => (
-                    <ListItem key={code}> {code}</ListItem>
-                  ))}
-              </List>
-            </Box>
-          ))}
-        </Box>
+        <PatientEntries patient={patient} />
       </Box>
     </div>
   );

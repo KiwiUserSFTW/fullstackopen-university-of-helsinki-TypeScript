@@ -58,7 +58,7 @@ export type Entry =
 export type PatientNewEntry = z.infer<typeof PatientNewEntryScheme>;
 export interface PatientEntry extends PatientNewEntry {
   id: string;
-  entries?: Entry[];
+  entries: Entry[];
 }
 
 export type PatientNonSensetiveEntries = Omit<PatientEntry, "ssn" | "entries">;
