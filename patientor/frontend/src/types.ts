@@ -63,3 +63,9 @@ export interface PatientEntry extends PatientNewEntry {
 
 export type PatientNonSensetiveEntries = Omit<PatientEntry, "ssn" | "entries">;
 export type PatientFormValues = Omit<PatientEntry, "id" | "entries">;
+
+export interface DiagnoseEntry {
+  code: string;
+  name: string;
+  latin?: string;
+}
