@@ -5,6 +5,7 @@ import { Male, Female } from "@mui/icons-material";
 import { PatientGender, PatientEntry, Gender } from "../../types";
 
 import patientService from "../../services/patients";
+import EntryDetails from "./EntryDetails";
 
 const GenderIcon = ({ gender }: { gender: Gender }): JSX.Element => {
   switch (gender) {
@@ -30,15 +31,7 @@ const PatientEntries = ({
       <Typography variant="h5">entries</Typography>
       {patient.entries?.length >= 1 ? (
         patient.entries.map((entry) => (
-          <Box key={entry.id}>
-            <Typography>
-              {entry.date} - {entry.description}
-            </Typography>
-            <ul>
-              {entry.diagnosisCodes &&
-                entry.diagnosisCodes.map((code) => <li key={code}> {code}</li>)}
-            </ul>
-          </Box>
+          <EntryDetails key={entry.id} entry={entry} />
         ))
       ) : (
         <Typography>no entries</Typography>

@@ -10,6 +10,12 @@ export const PatientGender = {
 
 export type Gender = (typeof PatientGender)[keyof typeof PatientGender];
 
+export const EntryTypes = {
+  OccupationalHealthcare: "OccupationalHealthcare",
+  Hospital: "Hospital",
+  HealthCheck: "HealthCheck",
+} as const;
+
 export interface BaseEntry {
   id: string;
   description: string;
@@ -19,7 +25,7 @@ export interface BaseEntry {
 }
 
 export interface HospitalEntry extends BaseEntry {
-  type: "Hospital";
+  type: typeof EntryTypes.Hospital;
   discharge: {
     date: string;
     criteria: string;
@@ -27,7 +33,7 @@ export interface HospitalEntry extends BaseEntry {
 }
 
 export interface OccupationalHealthcareEntry extends BaseEntry {
-  type: "OccupationalHealthcare";
+  type: typeof EntryTypes.OccupationalHealthcare;
   employerName: string;
   sickLeave?: {
     startDate: string;
@@ -46,7 +52,7 @@ type HealthCheckRating =
   (typeof HealthCheckRating)[keyof typeof HealthCheckRating];
 
 interface HealthCheckEntry extends BaseEntry {
-  type: "HealthCheck";
+  type: typeof EntryTypes.HealthCheck;
   healthCheckRating: HealthCheckRating;
 }
 
