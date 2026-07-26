@@ -1,6 +1,7 @@
 import express, { type Response, type Request } from "express";
 
 import type {
+  NewEntry,
   PatientEntry,
   PatientNewEntry,
   PatientNonSensetiveEntries,
@@ -8,6 +9,7 @@ import type {
 
 import {
   errorMiddleware,
+  newPatientsEntryParser,
   newPatientsParser,
 } from "../middleware/patientsMiddlewares.ts";
 import patientsService from "../service/patientsService.ts";
@@ -35,6 +37,17 @@ patientsRouter.post(
     res: Response<PatientEntry>
   ) => {
     res.json(patientsService.addPatients(req.body));
+  }
+);
+
+patientsRouter.post(
+  "/:id/entries",
+  newPatientsEntryParser,
+  (
+    req: Request<{ id: string }, unknown, NewEntry>,
+    res: Response<NewEntry>
+  ) => {
+    res.json(patientsService.addEntryToPatient(req.body, req.params.id));
   }
 );
 
