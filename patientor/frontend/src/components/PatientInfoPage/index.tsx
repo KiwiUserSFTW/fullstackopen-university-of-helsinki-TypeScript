@@ -2,10 +2,16 @@ import { useEffect, useState, type JSX } from "react";
 import { useParams } from "react-router-dom";
 import { Typography, Box } from "@mui/material";
 import { Male, Female } from "@mui/icons-material";
-import { PatientGender, PatientEntry, Gender } from "../../types";
+import {
+  PatientGender,
+  PatientEntry,
+  Gender,
+  DiagnoseEntry,
+} from "../../types";
 
 import patientService from "../../services/patients";
 import EntryDetails from "./EntryDetails";
+import diagnosesService from "../../services/diagnoses";
 
 const GenderIcon = ({ gender }: { gender: Gender }): JSX.Element => {
   switch (gender) {
@@ -25,13 +31,24 @@ const PatientEntries = ({
 }: {
   patient: PatientEntry;
 }): JSX.Element => {
+  const [diagnoses, setDisgnoses] = useState<DiagnoseEntry[] | null>(null);
+
+  useEffect(() => {
+    const fetchDiagnoses = async () => {
+      const diagnoses = await diagnosesService.getAll();
+      setDisgnoses(diagnoses);
+    };
+
+    fetchDiagnoses();
+  }, []);
+
   if (!patient) return <></>;
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h5">entries</Typography>
       {patient.entries?.length >= 1 ? (
         patient.entries.map((entry) => (
-          <EntryDetails key={entry.id} entry={entry} />
+          <EntryDetails key={entry.id} entry={entry} diagnoses={diagnoses} />
         ))
       ) : (
         <Typography>no entries</Typography>
@@ -42,7 +59,6 @@ const PatientEntries = ({
 const PatientInfoPage = (): JSX.Element => {
   const { id } = useParams();
   const [patient, setPatient] = useState<PatientEntry | null>(null);
-
   useEffect(() => {
     const fetchPatient = async () => {
       if (id) {

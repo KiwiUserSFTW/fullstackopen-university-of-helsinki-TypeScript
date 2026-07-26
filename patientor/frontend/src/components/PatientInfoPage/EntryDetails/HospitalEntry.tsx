@@ -1,21 +1,25 @@
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import type { JSX } from "react";
 
-import { JSX } from "react";
-
-import { type HospitalEntry as HospitalEntryType } from "../../../types";
+import {
+  type DiagnoseEntry,
+  type HospitalEntry as HospitalEntryType,
+} from "../../../types";
 import BaseEntry from "./BaseEntry";
 
-const HospitalEntry = ({
-  entry,
-}: {
+interface Props {
   entry: HospitalEntryType;
-}): JSX.Element => {
+  diagnoses: DiagnoseEntry[] | null;
+}
+
+const HospitalEntry = ({ entry, diagnoses }: Props): JSX.Element => {
   return (
     <BaseEntry
       date={entry.date}
       description={entry.description}
       specialist={entry.specialist}
       diagnosisCodes={entry.diagnosisCodes}
+      diagnoses={diagnoses}
       icon={<LocalHospitalIcon />}
       additionalInfo={
         <>
