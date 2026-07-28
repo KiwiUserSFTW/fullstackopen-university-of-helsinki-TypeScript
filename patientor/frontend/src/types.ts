@@ -1,4 +1,10 @@
 import { type PatientNewEntryScheme } from "./utils/parseNewPatientEntry.ts";
+import type {
+  NewEntrySchema,
+  HospitalEntrySchema,
+  HealthCheckEntrySchema,
+  OccupationalHealthcareEntrySchema,
+} from "./utils/parseNewPatientEntryAdding.ts";
 
 import type { z } from "zod";
 
@@ -10,56 +16,16 @@ export const PatientGender = {
 
 export type Gender = (typeof PatientGender)[keyof typeof PatientGender];
 
-export const EntryTypes = {
-  OccupationalHealthcare: "OccupationalHealthcare",
-  Hospital: "Hospital",
-  HealthCheck: "HealthCheck",
-} as const;
+export type NewEntry = z.infer<typeof NewEntrySchema>;
+export type HospitalEntry = z.infer<typeof HospitalEntrySchema>;
+export type HealthCheckEntry = z.infer<typeof HealthCheckEntrySchema>;
+export type OccupationalHealthcareEntry = z.infer<
+  typeof OccupationalHealthcareEntrySchema
+>;
 
-export interface BaseEntry {
+export type Entry = NewEntry & {
   id: string;
-  description: string;
-  date: string;
-  specialist: string;
-  diagnosisCodes?: Array<string>;
-}
-
-export interface HospitalEntry extends BaseEntry {
-  type: typeof EntryTypes.Hospital;
-  discharge: {
-    date: string;
-    criteria: string;
-  };
-}
-
-export interface OccupationalHealthcareEntry extends BaseEntry {
-  type: typeof EntryTypes.OccupationalHealthcare;
-  employerName: string;
-  sickLeave?: {
-    startDate: string;
-    endDate: string;
-  };
-}
-
-const HealthCheckRating = {
-  Healthy: 0,
-  LowRisk: 1,
-  HighRisk: 2,
-  CriticalRisk: 3,
-} as const;
-
-type HealthCheckRating =
-  (typeof HealthCheckRating)[keyof typeof HealthCheckRating];
-
-interface HealthCheckEntry extends BaseEntry {
-  type: typeof EntryTypes.HealthCheck;
-  healthCheckRating: HealthCheckRating;
-}
-
-export type Entry =
-  | HospitalEntry
-  | OccupationalHealthcareEntry
-  | HealthCheckEntry;
+};
 
 export type PatientNewEntry = z.infer<typeof PatientNewEntryScheme>;
 export interface PatientEntry extends PatientNewEntry {
