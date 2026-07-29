@@ -6,12 +6,10 @@ import {
   PatientGender,
   PatientEntry,
   Gender,
-  DiagnoseEntry,
+  Entry,
 } from "../../types";
-
+import PatientEntries from "./PatientEntries";
 import patientService from "../../services/patients";
-import EntryDetails from "./EntryDetails";
-import diagnosesService from "../../services/diagnoses";
 
 const GenderIcon = ({ gender }: { gender: Gender }): JSX.Element => {
   switch (gender) {
@@ -26,39 +24,10 @@ const GenderIcon = ({ gender }: { gender: Gender }): JSX.Element => {
   }
 };
 
-const PatientEntries = ({
-  patient,
-}: {
-  patient: PatientEntry;
-}): JSX.Element => {
-  const [diagnoses, setDisgnoses] = useState<DiagnoseEntry[] | null>(null);
-
-  useEffect(() => {
-    const fetchDiagnoses = async () => {
-      const diagnoses = await diagnosesService.getAll();
-      setDisgnoses(diagnoses);
-    };
-
-    fetchDiagnoses();
-  }, []);
-
-  if (!patient) return <></>;
-  return (
-    <Box sx={{ p: 2 }}>
-      <Typography variant="h5">entries</Typography>
-      {patient.entries?.length >= 1 ? (
-        patient.entries.map((entry) => (
-          <EntryDetails key={entry.id} entry={entry} diagnoses={diagnoses} />
-        ))
-      ) : (
-        <Typography>no entries</Typography>
-      )}
-    </Box>
-  );
-};
 const PatientInfoPage = (): JSX.Element => {
   const { id } = useParams();
   const [patient, setPatient] = useState<PatientEntry | null>(null);
+
   useEffect(() => {
     const fetchPatient = async () => {
       if (id) {
@@ -72,6 +41,15 @@ const PatientInfoPage = (): JSX.Element => {
 
   if (!patient) return <></>;
 
+  const addEntryToPatient = (newEntry: Entry) => {
+    const updatedPatient: PatientEntry = {
+      ...patient,
+      entries: [...patient.entries, newEntry],
+    };
+
+    setPatient(updatedPatient);
+  };
+
   return (
     <div>
       <Box sx={{ p: 3 }}>
@@ -81,7 +59,7 @@ const PatientInfoPage = (): JSX.Element => {
         <Typography>ssn: {patient.ssn}</Typography>
         <Typography>occupation: {patient.occupation}</Typography>
         <Typography>date of birth: {patient.dateOfBirth}</Typography>
-        <PatientEntries patient={patient} />
+        <PatientEntries patient={patient} addEntryToPatient = {addEntryToPatient}/>
       </Box>
     </div>
   );

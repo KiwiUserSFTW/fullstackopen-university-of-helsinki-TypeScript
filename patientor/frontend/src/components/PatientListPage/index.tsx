@@ -51,7 +51,7 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
         if (e?.response?.data && typeof e?.response?.data === "string") {
           const message = e.response.data.replace(
             "Something went wrong. Error: ",
-            ""
+            "",
           );
           console.error(message);
           setError(message);

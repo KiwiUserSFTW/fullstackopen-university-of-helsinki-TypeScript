@@ -2,23 +2,16 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import type { JSX } from "react";
 
-import {
-  EntryTypes,
-  type DiagnoseEntry,
-  type Entry,
-} from "../../../types";
+import { type DiagnoseEntry, type Entry } from "../../../types";
 import BaseEntry from "./BaseEntry";
 
-type HealthCheckEntryType = Extract<
-  Entry,
-  { type: typeof EntryTypes.HealthCheck }
->;
+type HealthCheckEntryType = Extract<Entry, { type: "HealthCheck" }>;
 
 interface Props {
   entry: HealthCheckEntryType;
   diagnoses: DiagnoseEntry[] | null;
 }
-
+  
 const healthCheckColors = {
   0: "green",
   1: "yellow",

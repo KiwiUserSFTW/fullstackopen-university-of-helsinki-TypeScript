@@ -14,6 +14,14 @@ export const PatientGender = {
   Other: "other",
 } as const;
 
+export const EntryTypes = {
+  Hospital: "Hospital",
+  OccupationalHealthcare: "OccupationalHealthcare",
+  HealthCheck: "HealthCheck",
+} as const;
+
+export type UnionEntryTypes = (typeof EntryTypes)[keyof typeof EntryTypes];
+
 export type Gender = (typeof PatientGender)[keyof typeof PatientGender];
 
 export type NewEntry = z.infer<typeof NewEntrySchema>;

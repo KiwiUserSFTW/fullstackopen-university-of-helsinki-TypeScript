@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { type NewEntry } from "../types";
+import { type NewEntry, EntryTypes } from "../types";
 
 export const HealthCheckRating = {
   Healthy: 0,
@@ -19,7 +19,7 @@ export const BaseEntrySchema = z.object({
 });
 
 export const HospitalEntrySchema = BaseEntrySchema.extend({
-  type: z.literal("Hospital"),
+  type: z.literal(EntryTypes.Hospital),
 
   discharge: z.object({
     date: z.iso.date(),
@@ -28,7 +28,7 @@ export const HospitalEntrySchema = BaseEntrySchema.extend({
 });
 
 export const OccupationalHealthcareEntrySchema = BaseEntrySchema.extend({
-  type: z.literal("OccupationalHealthcare"),
+  type: z.literal(EntryTypes.OccupationalHealthcare),
 
   employerName: z.string().min(1),
 
@@ -41,7 +41,7 @@ export const OccupationalHealthcareEntrySchema = BaseEntrySchema.extend({
 });
 
 export const HealthCheckEntrySchema = BaseEntrySchema.extend({
-  type: z.literal("HealthCheck"),
+  type: z.literal(EntryTypes.HealthCheck),
 
   healthCheckRating: z.union([
     z.literal(HealthCheckRating.Healthy),

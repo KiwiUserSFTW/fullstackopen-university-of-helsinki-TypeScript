@@ -11,15 +11,13 @@ import {
 } from "@mui/material";
 
 import { type HealthCheckRating } from "../../../utils/parseNewPatientEntryAdding";
-import { NewEntry } from "../../../types";
+import { UnionEntryTypes, NewEntry, EntryTypes } from "../../../types";
 import { assertNever } from "../../../utils/assertNever";
 
 interface Props {
   onCancel: () => void;
   onSubmit: (values: NewEntry) => void;
 }
-
-type EntryTypes = "Hospital" | "OccupationalHealthcare" | "HealthCheck";
 
 type FormState = {
   description: string;
@@ -57,7 +55,9 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
     healthCheckRating: "",
   });
 
-  const [entryType, setEntryType] = useState<EntryTypes>("Hospital");
+  const [entryType, setEntryType] = useState<UnionEntryTypes>(
+    EntryTypes.Hospital,
+  );
 
   const handleSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
@@ -76,10 +76,10 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
     };
 
     switch (entryType) {
-      case "Hospital":
+      case EntryTypes.Hospital:
         onSubmit({
           ...baseEntry,
-          type: "Hospital",
+          type: EntryTypes.Hospital,
           discharge: {
             date: form.dischargeDate,
             criteria: form.dischargeCriteria,
@@ -87,18 +87,18 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
         });
         return;
 
-      case "OccupationalHealthcare":
+      case EntryTypes.OccupationalHealthcare:
         onSubmit({
           ...baseEntry,
-          type: "OccupationalHealthcare",
+          type: EntryTypes.OccupationalHealthcare,
           employerName: form.employerName,
         });
         return;
 
-      case "HealthCheck":
+      case EntryTypes.HealthCheck:
         onSubmit({
           ...baseEntry,
-          type: "HealthCheck",
+          type: EntryTypes.HealthCheck,
           healthCheckRating: Number(
             form.healthCheckRating,
           ) as (typeof HealthCheckRating)[keyof typeof HealthCheckRating],
@@ -126,13 +126,15 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
           <Select
             value={entryType}
             label="Entry Type"
-            onChange={(event) => setEntryType(event.target.value as EntryTypes)}
+            onChange={(event) =>
+              setEntryType(event.target.value as UnionEntryTypes)
+            }
           >
-            <MenuItem value="Hospital">Hospital</MenuItem>
-            <MenuItem value="OccupationalHealthcare">
+            <MenuItem value={EntryTypes.Hospital}>Hospital</MenuItem>
+            <MenuItem value={EntryTypes.OccupationalHealthcare}>
               Occupational Healthcare
             </MenuItem>
-            <MenuItem value="HealthCheck">Health Check</MenuItem>
+            <MenuItem value={EntryTypes.HealthCheck}>Health Check</MenuItem>
           </Select>
         </FormControl>
         <TextField
@@ -165,7 +167,7 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
           value={form.diagnosisCodes}
           onChange={handleChange("diagnosisCodes")}
         />
-        {entryType === "Hospital" && (
+        {entryType === EntryTypes.Hospital && (
           <>
             <TextField
               label="Discharge date"
@@ -184,7 +186,7 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
             />
           </>
         )}
-        {entryType === "OccupationalHealthcare" && (
+        {entryType === EntryTypes.OccupationalHealthcare && (
           <>
             <TextField
               label="Employer name"
@@ -211,7 +213,7 @@ const AddEntryForm = ({ onCancel, onSubmit }: Props) => {
             />
           </>
         )}
-        {entryType === "HealthCheck" && (
+        {entryType === EntryTypes.HealthCheck && (
           <TextField
             label="Health check rating"
             type="number"
