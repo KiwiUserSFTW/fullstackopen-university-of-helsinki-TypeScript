@@ -35,13 +35,14 @@ const PatientEntries = ({
       closeModal();
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
-        if (e?.response?.data && typeof e?.response?.data === "string") {
-          const message = e.response.data.replace(
-            "Something went wrong. Error: ",
-            "",
-          );
-          console.error(message);
-          setError(message);
+        if (
+          e.response?.data &&
+          typeof e.response.data === "object" &&
+          "error" in e.response.data &&
+          Array.isArray(e.response.data.error)
+        ) {
+          const firstError = e.response.data.error[0];
+          setError(`${firstError.path.join(".")}: Invalid input`);
         } else {
           setError("Unrecognized axios error");
         }
@@ -72,6 +73,7 @@ const PatientEntries = ({
         <Typography>no entries</Typography>
       )}
       <AddEntryModal
+        diagnoses={diagnoses}
         modalOpen={modalOpen}
         onSubmit={handleAddNewEntrySubmit}
         error={error}

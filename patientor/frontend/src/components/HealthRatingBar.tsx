@@ -1,7 +1,8 @@
-import { Rating } from '@mui/material';
-import { Favorite } from '@mui/icons-material';
+import { Rating } from "@mui/material";
+import { Favorite } from "@mui/icons-material";
 
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
+import { HEALTHBAR_TEXTS } from "../constants";
 
 type BarProps = {
   rating: number;
@@ -14,15 +15,8 @@ const StyledRating = styled(Rating)({
   },
   iconHover: {
     color: "#ff3d47",
-  }
+  },
 });
-
-const HEALTHBAR_TEXTS = [
-  "The patient is in great shape",
-  "The patient has a low risk of getting sick",
-  "The patient has a high risk of getting sick",
-  "The patient has a diagnosed condition",
-];
 
 const HealthRatingBar = ({ rating, showText }: BarProps) => {
   return (
