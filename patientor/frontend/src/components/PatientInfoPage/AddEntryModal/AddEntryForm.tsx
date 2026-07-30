@@ -31,12 +31,14 @@ type FormState = {
   specialist: string;
   diagnosisCodes: string[];
 
-  dischargeDate: string;
-  dischargeCriteria: string;
+  // TODO double check structure of different entry types
+  dischargeDate: string | null;
+  dischargeCriteria: string | null;
 
-  employerName: string;
   sickLeaveStartDate: string;
   sickLeaveEndDate: string;
+
+  employerName: string;
 
   healthCheckRating: string;
 };
@@ -49,8 +51,8 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
     diagnosisCodes: [],
 
     // Hospital values
-    dischargeDate: "",
-    dischargeCriteria: "",
+    dischargeDate: null,
+    dischargeCriteria: null,
 
     // Occupational healthcare values
     employerName: "",
@@ -81,10 +83,14 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
         onSubmit({
           ...baseEntry,
           type: EntryTypes.Hospital,
-          discharge: {
-            date: form.dischargeDate,
-            criteria: form.dischargeCriteria,
-          },
+          ...(form.dischargeDate && form.dischargeCriteria
+            ? {
+                discharge: {
+                  date: form.dischargeDate,
+                  criteria: form.dischargeCriteria,
+                },
+              }
+            : {}),
         });
         return;
 
@@ -145,13 +151,13 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
           value={form.description}
           onChange={handleChange("description")}
         />
-        <InputLabel> Date </InputLabel>
-
         <TextField
           type="date"
+          label="Date"
           value={form.date}
           onChange={handleChange("date")}
           fullWidth
+          slotProps={{ inputLabel: { shrink: true } }}
         />
         <TextField
           label="Specialist"
@@ -192,12 +198,13 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
         )}
         {entryType === EntryTypes.Hospital && (
           <>
-            <InputLabel> Discharge date </InputLabel>
             <TextField
               type="date"
+              label="Discharge"
               value={form.dischargeDate}
               onChange={handleChange("dischargeDate")}
               fullWidth
+              slotProps={{ inputLabel: { shrink: true } }}
             />
 
             <TextField
@@ -218,19 +225,21 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
               value={form.employerName}
               onChange={handleChange("employerName")}
             />
-            <InputLabel> Sick leave start date </InputLabel>
             <TextField
+              label="Sick leave start date"
               type="date"
               fullWidth
               value={form.sickLeaveStartDate}
               onChange={handleChange("sickLeaveStartDate")}
+              slotProps={{ inputLabel: { shrink: true } }}
             />
-            <InputLabel> Sick leave end date </InputLabel>
             <TextField
+              label="Sick leave end date"
               type="date"
               fullWidth
               value={form.sickLeaveEndDate}
               onChange={handleChange("sickLeaveEndDate")}
+              slotProps={{ inputLabel: { shrink: true } }}
             />
           </>
         )}
@@ -252,7 +261,9 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
               }
             >
               {HEALTHBAR_TEXTS.map((rate, index) => (
-                <MenuItem value={index}>{index} - {rate}</MenuItem>
+                <MenuItem value={index}>
+                  {index} - {rate}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>

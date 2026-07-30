@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Box,
   Table,
@@ -17,8 +18,6 @@ import AddPatientModal from "../AddPatientModal";
 import HealthRatingBar from "../HealthRatingBar";
 
 import patientService from "../../services/patients";
-import { useNavigate } from "react-router-dom";
-
 interface Props {
   patients: PatientEntry[];
   setPatients: React.Dispatch<React.SetStateAction<PatientEntry[]>>;
@@ -28,17 +27,11 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>();
 
-  const navigate = useNavigate();
-
   const openModal = (): void => setModalOpen(true);
 
   const closeModal = (): void => {
     setModalOpen(false);
     setError(undefined);
-  };
-
-  const handleRowClick = async (id: string) => {
-    navigate(`patients/${id}`);
   };
 
   const submitNewPatient = async (values: PatientFormValues) => {
@@ -83,12 +76,15 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
         </TableHead>
         <TableBody>
           {Object.values(patients).map((patient: PatientEntry) => (
-            <TableRow
-              key={patient.id}
-              onClick={() => handleRowClick(patient.id)}
-              sx={{ cursor: "pointer" }}
-            >
-              <TableCell>{patient.name}</TableCell>
+            <TableRow key={patient.id}>
+              <TableCell>
+                <Link
+                  to={`patients/${patient.id}`}
+                  style={{ color:"black", textDecoration: "none" }}
+                >
+                  {patient.name}
+                </Link>
+              </TableCell>
               <TableCell>{patient.gender}</TableCell>
               <TableCell>{patient.occupation}</TableCell>
               <TableCell>

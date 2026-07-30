@@ -21,10 +21,12 @@ export const BaseEntrySchema = z.object({
 export const HospitalEntrySchema = BaseEntrySchema.extend({
   type: z.literal(EntryTypes.Hospital),
 
-  discharge: z.object({
-    date: z.iso.date(),
-    criteria: z.string().min(1),
-  }),
+  discharge: z
+    .object({
+      date: z.iso.date(),
+      criteria: z.string().min(1),
+    })
+    .optional(),
 });
 
 export const OccupationalHealthcareEntrySchema = BaseEntrySchema.extend({
@@ -34,7 +36,7 @@ export const OccupationalHealthcareEntrySchema = BaseEntrySchema.extend({
 
   sickLeave: z
     .object({
-    startDate: z.iso.date(),
+      startDate: z.iso.date(),
       endDate: z.iso.date(),
     })
     .optional(),
