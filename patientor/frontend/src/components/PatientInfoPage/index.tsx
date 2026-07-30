@@ -1,5 +1,5 @@
-import { useEffect, useState, type JSX } from "react";
 import { useParams } from "react-router-dom";
+import { useEffect, useState, type JSX } from "react";
 import { Typography, Box } from "@mui/material";
 import { Male, Female } from "@mui/icons-material";
 import {
