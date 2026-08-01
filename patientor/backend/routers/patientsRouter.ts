@@ -1,6 +1,7 @@
 import express, { type Response, type Request } from "express";
 
 import type {
+  Entry,
   NewEntry,
   PatientEntry,
   PatientNewEntry,
@@ -34,21 +35,24 @@ patientsRouter.post(
   newPatientsParser,
   (
     req: Request<unknown, unknown, PatientNewEntry>,
-    res: Response<PatientEntry>
+    res: Response<PatientEntry>,
   ) => {
     res.json(patientsService.addPatients(req.body));
-  }
+  },
 );
 
 patientsRouter.post(
   "/:id/entries",
   newPatientsEntryParser,
-  (
-    req: Request<{ id: string }, unknown, NewEntry>,
-    res: Response<NewEntry>
-  ) => {
-    res.json(patientsService.addEntryToPatient(req.body, req.params.id));
-  }
+  (req: Request<{ id: string }, unknown, NewEntry>, res: Response<Entry>) => {
+    const entry = patientsService.addEntryToPatient(req.body, req.params.id);
+
+    if (entry) {
+      res.json(entry);
+    } else {
+      res.sendStatus(404);
+    }
+  },
 );
 
 patientsRouter.use(errorMiddleware);
