@@ -32,8 +32,8 @@ type FormState = {
   diagnosisCodes: string[];
 
   // TODO double check structure of different entry types
-  dischargeDate: string | null;
-  dischargeCriteria: string | null;
+  dischargeDate: string;
+  dischargeCriteria: string;
 
   sickLeaveStartDate: string;
   sickLeaveEndDate: string;
@@ -51,8 +51,8 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
     diagnosisCodes: [],
 
     // Hospital values
-    dischargeDate: null,
-    dischargeCriteria: null,
+    dischargeDate: "",
+    dischargeCriteria: "",
 
     // Occupational healthcare values
     employerName: "",
@@ -83,7 +83,7 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
         onSubmit({
           ...baseEntry,
           type: EntryTypes.Hospital,
-          ...(form.dischargeDate && form.dischargeCriteria
+          ...(form.dischargeDate || form.dischargeCriteria
             ? {
                 discharge: {
                   date: form.dischargeDate,
@@ -99,6 +99,14 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
           ...baseEntry,
           type: EntryTypes.OccupationalHealthcare,
           employerName: form.employerName,
+          ...(form.sickLeaveStartDate || form.sickLeaveEndDate
+            ? {
+                sickLeave: {
+                  startDate: form.sickLeaveStartDate,
+                  endDate: form.sickLeaveEndDate,
+                },
+              }
+            : {}),
         });
         return;
 
@@ -232,6 +240,7 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
               value={form.sickLeaveStartDate}
               onChange={handleChange("sickLeaveStartDate")}
               slotProps={{ inputLabel: { shrink: true } }}
+              sx={{ mb: 2 }}
             />
             <TextField
               label="Sick leave end date"
@@ -261,7 +270,7 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
               }
             >
               {HEALTHBAR_TEXTS.map((rate, index) => (
-                <MenuItem value={index}>
+                <MenuItem key={index} value={index}>
                   {index} - {rate}
                 </MenuItem>
               ))}

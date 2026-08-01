@@ -55,7 +55,7 @@ const BaseEntry = ({
         <Typography sx={{ mt: 1 }}>{additionalInfo}</Typography>
       )}
 
-      {diagnosisCodes && diagnosisCodes?.length > 1 && (
+      {diagnosisCodes && diagnosisCodes?.length > 0 && (
         <Box>
           <Typography> diagnoses codes: </Typography>
           <ul>
