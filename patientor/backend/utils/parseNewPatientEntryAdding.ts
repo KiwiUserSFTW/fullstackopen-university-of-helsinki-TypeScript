@@ -21,10 +21,12 @@ const BaseEntrySchema = z.object({
 const HospitalEntrySchema = BaseEntrySchema.extend({
   type: z.literal("Hospital"),
 
-  discharge: z.object({
-    date: z.iso.date(),
-    criteria: z.string().min(1),
-  }),
+  discharge: z
+    .object({
+      date: z.iso.date(),
+      criteria: z.string().min(1),
+    })
+    .optional(),
 });
 
 const OccupationalHealthcareEntrySchema = BaseEntrySchema.extend({

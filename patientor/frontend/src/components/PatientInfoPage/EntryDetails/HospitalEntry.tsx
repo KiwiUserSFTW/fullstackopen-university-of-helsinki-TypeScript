@@ -22,9 +22,11 @@ const HospitalEntry = ({ entry, diagnoses }: Props): JSX.Element => {
       diagnoses={diagnoses}
       icon={<LocalHospitalIcon />}
       additionalInfo={
-        <>
-          discharge: {entry.discharge.date} - {entry.discharge.criteria}
-        </>
+        entry.discharge && (
+          <>
+            discharge: {entry.discharge.date} - {entry.discharge.criteria}
+          </>
+        )
       }
     />
   );
